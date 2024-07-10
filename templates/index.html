@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo de Predicción</title>
+</head>
+<body>
+    <h1>Predicción de Precio de Cierre</h1>
+    <form id="predictionForm">
+        <label for="adjClose">Adj Close:</label>
+        <input type="text" id="adjClose" name="adjClose" required><br><br>
+        <label for="adjHigh">Adj High:</label>
+        <input type="text" id="adjHigh" name="adjHigh" required><br><br>
+        <label for="high">High:</label>
+        <input type="text" id="high" name="high" required><br><br>
+        <label for="low">Low:</label>
+        <input type="text" id="low" name="low" required><br><br>
+        <label for="adjLow">Adj Low:</label>
+        <input type="text" id="adjLow" name="adjLow" required><br><br>
+        <input type="submit" value="Predecir">
+    </form>
+    <h2>Resultado: <span id="result"></span></h2>
+    <script>
+        document.getElementById('predictionForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => { data[key] = parseFloat(value); });
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if ('prediction' in result) {
+                    document.getElementById('result').innerText = result.prediction;
+                } else {
+                    document.getElementById('result').innerText = "Error en la predicción: " + result.error;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = "Error en la solicitud";
+            }
+        };
+    </script>
+</body>
+</html>
