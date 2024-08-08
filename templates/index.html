@@ -82,6 +82,8 @@
             const data = {};
             formData.forEach((value, key) => { data[key] = parseFloat(value); });
 
+            const adjClose = data['adjClose']; // Obtener el valor de adjClose
+
             try {
                 const response = await fetch('/predict', {
                     method: 'POST',
@@ -90,7 +92,7 @@
                 });
                 const result = await response.json();
                 if ('prediction' in result) {
-                    document.getElementById('result').innerText = result.prediction;
+                    document.getElementById('result').innerText = `Adj Close: ${adjClose}, Predicción: ${result.prediction}`;
                 } else {
                     document.getElementById('result').innerText = "Error en la predicción: " + result.error;
                 }
@@ -102,3 +104,4 @@
     </script>
 </body>
 </html>
+
