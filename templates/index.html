@@ -92,7 +92,7 @@
                 });
                 const result = await response.json();
                 if ('prediction' in result) {
-                    document.getElementById('result').innerText = `Adj Close: ${adjClose}, Predicción: ${result.prediction}`;
+                    document.getElementById('result').innerText = `${adjClose}`;
                 } else {
                     document.getElementById('result').innerText = "Error en la predicción: " + result.error;
                 }
